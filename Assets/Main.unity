@@ -202,9 +202,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 273d123feb9e3f345873dbffce38bd5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destination: {fileID: 616066865}
   speed: 10
   nextWaypointDistance: 0.1
+  decayRate: 0.75
+  currentNoiseOfTarget: 0
 --- !u!114 &168664527
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -289,11 +290,6 @@ MonoBehaviour:
   bezierTangentLength: 0.4
   offset: 0.2
   factor: 0.1
---- !u!4 &616066865 stripped
-Transform:
-  m_PrefabParentObject: {fileID: 4549350455131450, guid: 22cc71e844f6c864f858abc8e2bec18c,
-    type: 2}
-  m_PrefabInternal: {fileID: 2082313521}
 --- !u!1 &638966428
 GameObject:
   m_ObjectHideFlags: 0
@@ -1489,6 +1485,15 @@ MonoBehaviour:
       _behaviorId: 0
       _userAssignable: 1
       _categoryId: 0
+    - _id: 2
+      _name: YELL
+      _type: 1
+      _descriptiveName: YELL
+      _positiveDescriptiveName: 
+      _negativeDescriptiveName: 
+      _behaviorId: 0
+      _userAssignable: 1
+      _categoryId: 0
     actionCategories:
     - _name: Default
       _descriptiveName: Default
@@ -1498,7 +1503,7 @@ MonoBehaviour:
     actionCategoryMap:
       list:
       - categoryId: 0
-        actionIds: 0000000001000000
+        actionIds: 000000000100000002000000
     inputBehaviors:
     - _id: 0
       _name: Default
@@ -1577,12 +1582,23 @@ MonoBehaviour:
         _modifierKey1: 0
         _modifierKey2: 0
         _modifierKey3: 0
+      - _actionCategoryId: 0
+        _actionId: 2
+        _elementType: 1
+        _elementIdentifierId: 4
+        _axisRange: 0
+        _invert: 0
+        _axisContribution: 0
+        _keyboardKeyCode: 0
+        _modifierKey1: 0
+        _modifierKey2: 0
+        _modifierKey3: 0
     keyboardMaps: []
     mouseMaps: []
     customControllerMaps: []
     customControllers: []
     playerIdCounter: 3
-    actionIdCounter: 2
+    actionIdCounter: 3
     actionCategoryIdCounter: 1
     inputBehaviorIdCounter: 1
     mapCategoryIdCounter: 1
@@ -1639,7 +1655,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 1
   data:
-    dataString: UEsDBBQAAAgIAACAn+sikwbOCwIAAIAEAAALACQAZ3JhcGgwLmpzb24KACAAAAAAAAEAGAAAgD7V3rGdAQCAPtXesZ0BAIA+1d6xnQF1U11z2jAQ/CuMnpuO+Ya+tZDQziSBCe30+ZDO+AZZ8uijBDL575VkEzu0eTLs7p13784vDGyF3D2BI82+9PqfeoysLtEZ4l/VXmIAswB6Rbk25a3Y40JbZwOcg7QYKKNdrFYBeumx5/CYx4pTU3mOz95r+MVROTSt7P8qr7iEskKxpTO24sG4UQ/GSaa0wEaRfU4k11KSbYwwd6oix7ZVgQZZ4AVByJUMxJgF0r5wsWG3dp3nFl1jysBpSSaMp27KvmlXxE4l2EPt7A9Ij8nUJLmqmz78w9/0E50bXX6/vLefxXe4gvjhCU4crOsMtQsv3xv36gjyADuJvwtUj3pltFcikM74WOotDpbt37doiwL5ocVrq1egrz5eT4jwmsI/LySVuzT4UQ1spU7TTotHE1bzI/hNV2GbDgGNJn5Z/An77vk0xB0Z6wLVhATv9D2pw8qQ6Kov+JKsu6eS6kHGe4hxdtqbqGa3acYxvXcLbRSabpMKFUh32oQXu+udX3EfV90Bd/qyk4a7fDFXJQlu9Vl2RW308W27ttDHB7TF2jtJCtvVROIxTHahlapPshvpUrb1JgfeKdt7Eu9vkU12M57tpkM+G47nIwE3o2w6nE3Hoj+fzOeijywdK6mQE+SmNtqMJ+xZtc1VOMzYMW6ptzJQpc9DGDiu6Fxq2ypJ5XrLDaJa1x2S8de/UEsDBBQAAAgIAACAn+tu4XRLNAAAADcAAAASACQAZ3JhcGgwX2VkaXRvci5qc29uCgAgAAAAAAABABgAAIA+1d6xnQEAgD7V3rGdAQCAPtXesZ0Bq1bKyU/OTk1RslIoKSpN1VFQKs7IL3etKClKBAqlJeYUg8QKMsvyS4B8JefUvJLUIqVaAFBLAwQUAAAICAAAgJ/rocJe63MAAACEAAAACQAkAG1ldGEuanNvbgoAIAAAAAAAAQAYAACAPtXesZ0BAIA+1d6xnQEAgD7V3rGdAatWKkstKs7Mz1OyUjDRM9AzNNRRUEovSizIKAaKGIE4pZkpIHa0klmSRbJBkrlxsoWxqaVJSqKuiYG5sYW5aYqhpZmlZYphqpKOQl5pTk4sUFdJZUGqX2JuKkRnQGJJRlpmXkpmXrqee1FmijvIApjqWgBQSwECLQAUAAAICAAAgJ/rIpMGzgsCAACABAAACwAkAAAAAAAAAAAAAAAAAAAAZ3JhcGgwLmpzb24KACAAAAAAAAEAGAAAgD7V3rGdAQCAPtXesZ0BAIA+1d6xnQFQSwECLQAUAAAICAAAgJ/rbuF0SzQAAAA3AAAAEgAkAAAAAAAAAAAAAABYAgAAZ3JhcGgwX2VkaXRvci5qc29uCgAgAAAAAAABABgAAIA+1d6xnQEAgD7V3rGdAQCAPtXesZ0BUEsBAi0AFAAACAgAAICf66HCXutzAAAAhAAAAAkAJAAAAAAAAAAAAAAA4AIAAG1ldGEuanNvbgoAIAAAAAAAAQAYAACAPtXesZ0BAIA+1d6xnQEAgD7V3rGdAVBLBQYAAAAAAwADABwBAACeAwAAAAA=
+    dataString: UEsDBBQAAAgIAACAn+sikwbOCwIAAIAEAAALACQAZ3JhcGgwLmpzb24KACAAAAAAAAEAGAAAgD7V3rGdAQCAPtXesZ0BAIA+1d6xnQF1U11z2jAQ/CuMnpuO+Ya+tZDQziSBCe30+ZDO+AZZ8uijBDL575VkEzu0eTLs7p13784vDGyF3D2BI82+9PqfeoysLtEZ4l/VXmIAswB6Rbk25a3Y40JbZwOcg7QYKKNdrFYBeumx5/CYx4pTU3mOz95r+MVROTSt7P8qr7iEskKxpTO24sG4UQ/GSaa0wEaRfU4k11KSbYwwd6oix7ZVgQZZ4AVByJUMxJgF0r5wsWG3dp3nFl1jysBpSSaMp27KvmlXxE4l2EPt7A9Ij8nUJLmqmz78w9/0E50bXX6/vLefxXe4gvjhCU4crOsMtQsv3xv36gjyADuJvwtUj3pltFcikM74WOotDpbt37doiwL5ocVrq1egrz5eT4jwmsI/LySVuzT4UQ1spU7TTotHE1bzI/hNV2GbDgGNJn5Z/An77vk0xB0Z6wLVhATv9D2pw8qQ6Kov+JKsu6eS6kHGe4hxdtqbqGa3acYxvXcLbRSabpMKFUh32oQXu+udX3EfV90Bd/qyk4a7fDFXJQlu9Vl2RW308W27ttDHB7TF2jtJCtvVROIxTHahlapPshvpUrb1JgfeKdt7Eu9vkU12M57tpkM+G47nIwE3o2w6nE3Hoj+fzOeijywdK6mQE+SmNtqMJ+xZtc1VOMzYMW6ptzJQpc9DGDiu6Fxq2ypJ5XrLDaJa1x2S8de/UEsDBBQAAAgIAACAn+tu4XRLNAAAADcAAAASACQAZ3JhcGgwX2VkaXRvci5qc29uCgAgAAAAAAABABgAAIA+1d6xnQEAgD7V3rGdAQCAPtXesZ0Bq1bKyU/OTk1RslIoKSpN1VFQKs7IL3etKClKBAqlJeYUg8QKMsvyS4B8JefUvJLUIqVaAFBLAwQUAAAICAAAgJ/ribiW9mwAAAB4AAAACQAkAG1ldGEuanNvbgoAIAAAAAAAAQAYAACAPtXesZ0BAIA+1d6xnQEAgD7V3rGdAatWKkstKs7Mz1OyUjDRM9AzNNRRUEovSizIKAaKgDmlmSkgdrSSWZJFskGSuXGyhbGppUlKoq6JgbmxhblpiqGlmaVlimGqUixQfUllQapfYm4qRE9AYklGWmZeSmZeup57UWaKO8hopdhaAFBLAQItABQAAAgIAACAn+sikwbOCwIAAIAEAAALACQAAAAAAAAAAAAAAAAAAABncmFwaDAuanNvbgoAIAAAAAAAAQAYAACAPtXesZ0BAIA+1d6xnQEAgD7V3rGdAVBLAQItABQAAAgIAACAn+tu4XRLNAAAADcAAAASACQAAAAAAAAAAAAAAFgCAABncmFwaDBfZWRpdG9yLmpzb24KACAAAAAAAAEAGAAAgD7V3rGdAQCAPtXesZ0BAIA+1d6xnQFQSwECLQAUAAAICAAAgJ/ribiW9mwAAAB4AAAACQAkAAAAAAAAAAAAAADgAgAAbWV0YS5qc29uCgAgAAAAAAABABgAAIA+1d6xnQEAgD7V3rGdAQCAPtXesZ0BUEsFBgAAAAADAAMAHAEAAJcDAAAAAA==
     upgradeData: 
     data_backup: 
     file_cachedStartup: {fileID: 0}
@@ -1873,6 +1889,50 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 22cc71e844f6c864f858abc8e2bec18c, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &1992885593
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1992885595}
+  - component: {fileID: 1992885594}
+  m_Layer: 0
+  m_Name: NoiseManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1992885594
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1992885593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78eb0ba5fa2061048ac00b7d89f28c76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnNoiseMade:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: NoiseEvent, Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+--- !u!4 &1992885595
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1992885593}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.13338766, y: -1.4279706, z: 0.03236285}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2082313521
 Prefab:
   m_ObjectHideFlags: 0
