@@ -35,8 +35,6 @@ public class Enemy : MonoBehaviour {
             return;
         }
 
-		
-
 		Vector3 dir = (currentPath.vectorPath[currentWaypoint]-transform.position).normalized;
 		rb.AddForce(dir * speed);
 
@@ -48,7 +46,7 @@ public class Enemy : MonoBehaviour {
 
 	void OnPathComplete(Path p) {
 		currentPath = p;
-		currentWaypoint = 0;
+		currentWaypoint = 1;
 		currentDestination = destination.position;
 	}
 
