@@ -3295,11 +3295,6 @@ Prefab:
       propertyPath: patrolPointsParent
       value: 
       objectReference: {fileID: 732257162}
-    - target: {fileID: 114108192536592148, guid: c8ab784a6da642b4e980e8b14fc21dff,
-        type: 2}
-      propertyPath: searchLayerMask.m_Bits
-      value: 256
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c8ab784a6da642b4e980e8b14fc21dff, type: 2}
   m_IsPrefabParent: 0
@@ -3787,24 +3782,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2050834689 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1104182412295150, guid: 22cc71e844f6c864f858abc8e2bec18c,
-    type: 2}
-  m_PrefabInternal: {fileID: 2082313521}
---- !u!114 &2050834696
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2050834689}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac91a90066b359148bfd2cd943d983a6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentItem: {fileID: 0}
-  numUses: 0
 --- !u!1001 &2082313521
 Prefab:
   m_ObjectHideFlags: 0
@@ -3843,14 +3820,6 @@ Prefab:
     - target: {fileID: 4549350455131450, guid: 22cc71e844f6c864f858abc8e2bec18c, type: 2}
       propertyPath: m_RootOrder
       value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 1665872269898060, guid: 22cc71e844f6c864f858abc8e2bec18c, type: 2}
-      propertyPath: m_Layer
-      value: 11
-      objectReference: {fileID: 0}
-    - target: {fileID: 1104182412295150, guid: 22cc71e844f6c864f858abc8e2bec18c, type: 2}
-      propertyPath: m_Layer
-      value: 11
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 22cc71e844f6c864f858abc8e2bec18c, type: 2}

@@ -24,7 +24,8 @@ GameObject:
   - component: {fileID: 58552055850580736}
   - component: {fileID: 114434498223811570}
   - component: {fileID: 114827222490415640}
-  m_Layer: 0
+  - component: {fileID: 114188084915231634}
+  m_Layer: 11
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -40,7 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4373795500930892}
   - component: {fileID: 212142140815223598}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: NOISE
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -86,7 +87,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 3
+  m_LinearDrag: 5
   m_AngularDrag: 0.05
   m_GravityScale: 1
   m_Material: {fileID: 0}
@@ -109,6 +110,19 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.32
+--- !u!114 &114188084915231634
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1104182412295150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac91a90066b359148bfd2cd943d983a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentItem: {fileID: 0}
+  numUses: 0
 --- !u!114 &114434498223811570
 MonoBehaviour:
   m_ObjectHideFlags: 1

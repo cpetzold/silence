@@ -30,13 +30,14 @@ public class Enemy : MonoBehaviour {
 
     public LayerMask searchLayerMask;
     public Vector2[] searchPoints;
+    public int minSearchPoints = 3;
+    public int maxSearchPoints = 10;
     public int currentSearchIndex = 0;
     public float maxSearchDistance = 2.0f;
     public float searchWallPadding = 0.5f;
 
     public EnemyState state;
 
-	// Use this for initialization
 	void Start() {
 		seeker = GetComponent<Seeker>();
 		rb = GetComponent<Rigidbody2D>();
@@ -44,8 +45,11 @@ public class Enemy : MonoBehaviour {
 
 		NoiseManager.instance.OnNoiseMade.AddListener(HandleNoiseEvent);
         
-        StartSearching();
-        //StartPatrolling();
+        if (state == EnemyState.Patrolling) {
+            StartPatrolling();
+        } else if (state == EnemyState.Searching) {
+            StartSearching();
+        }
 	}
 	
 	void Destroy() {
@@ -99,7 +103,7 @@ public class Enemy : MonoBehaviour {
             if (currentSearchIndex == searchPoints.Length - 1) {
                 StartPatrolling();
             } else {
-                SetDestination(searchPoints[++currentSearchIndex]);
+                SetDestination(searchPoints[++currentSearchIndex], 0.5f);
             }
         }
         
@@ -111,10 +115,10 @@ public class Enemy : MonoBehaviour {
     void StartSearching() {
         state = EnemyState.Searching;
 
-        int numPoints = Random.Range(2, 5);
+        int numPoints = Random.Range(minSearchPoints, maxSearchPoints);
         searchPoints = GetSearchPoints(numPoints);
         currentSearchIndex = 0;
-        SetDestination(searchPoints[currentSearchIndex]);
+        SetDestination(searchPoints[currentSearchIndex], 1);
     }
 
     Vector2[] GetSearchPoints(int numPoints) {
@@ -160,6 +164,10 @@ public class Enemy : MonoBehaviour {
 		}
 	}
 
+    void SetDestination(Vector2 newDest, float delay) {
+        StartCoroutine(SetDestinationCo(newDest, delay));
+    }
+
     void ChaseNoise(NoiseEventData noise) {
         state = EnemyState.Chasing;
         SetDestination(noise.position);
@@ -179,5 +187,8 @@ public class Enemy : MonoBehaviour {
         }
     }
 
-
+    IEnumerator SetDestinationCo(Vector2 newDest, float delay) {
+        yield return new WaitForSeconds(delay);
+        SetDestination(newDest);
+    }
 }
