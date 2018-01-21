@@ -41,6 +41,10 @@ public class Enemy : MonoBehaviour {
 	void Start() {
 		seeker = GetComponent<Seeker>();
 		rb = GetComponent<Rigidbody2D>();
+
+        if (patrolPointsParent == null)
+            patrolPointsParent = GameObject.FindGameObjectWithTag("PatrolPoints").gameObject.transform;
+
         patrolPoints = patrolPointsParent.GetChildren().Select(t => (Vector2)t.position).ToArray();
 
 		NoiseManager.instance.OnNoiseMade.AddListener(HandleNoiseEvent);
