@@ -12,6 +12,12 @@ public class NoiseEventData{
 		position = loc;
 		radius = rad;
 	}
+
+    public float PercievedNoise(Vector2 listenerPosition)
+    {
+        float dist = Vector2.Distance(listenerPosition, position);
+        return 1 - (dist / radius);
+    }
 	
 }
 
@@ -30,8 +36,9 @@ public class NoiseManager : MonoBehaviour {
 		instance.OnNoiseMade.Invoke(new NoiseEventData(loc, radius));
 	}
 
-	void Start(){
+	void Awake(){
 		instance = this;
+        OnNoiseMade = new NoiseEvent();
 	}
 
 }

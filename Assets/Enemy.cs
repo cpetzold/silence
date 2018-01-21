@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using Pathfinding;
 
+public enum EnemyState {
+    Patrolling, Chasing, Searching
+}
+
 public class Enemy : MonoBehaviour {
 
 	public float speed = 1;
@@ -17,41 +21,108 @@ public class Enemy : MonoBehaviour {
 	int currentWaypoint;
 	Seeker seeker;
 
+    public Transform patrolPointsParent;
+    public Transform[] patrolPoints;
+    public int currentPatrolIndex = 0;
+
+    public EnemyState state;
+
 	// Use this for initialization
 	void Start() { 
 		seeker = GetComponent<Seeker>();
 		rb = GetComponent<Rigidbody2D>();
 
 		NoiseManager.instance.OnNoiseMade.AddListener(HandleNoiseEvent);
+        
+
+        patrolPoints = new Transform[patrolPointsParent.childCount];
+        for (int i = 0; i < patrolPoints.Length; i++)
+        {
+            patrolPoints[i] = patrolPointsParent.GetChild(i);
+        }
+        //patrolPoints = patrolPointsParent.GetComponentsInChildren<Transform>();
+
+        StartPatrolling();
 	}
 	
-	void Destroy(){
+	void Destroy() {
 		NoiseManager.instance.OnNoiseMade.RemoveListener(HandleNoiseEvent);
 	}
 	
-	// Update is called once per frame
-	void FixedUpdate(){
-		DetermineTarget();
-		MoveAlongPath();
-
-		currentNoiseOfTarget = Mathf.Max(0, currentNoiseOfTarget - decayRate * Time.fixedDeltaTime);
+	void FixedUpdate() {
+        switch (state) {
+            case EnemyState.Patrolling:
+                UpdatePatrolling();
+                break;
+            case EnemyState.Chasing:
+                UpdateChasing();
+                break;
+            case EnemyState.Searching:
+                UpdateSearching();
+                break;
+        }
 	}
 
-	void DetermineTarget(){
-		
+    void UpdateChasing() {
+        bool reachedDestination = MoveAlongPath();
+        if (reachedDestination) {
+            currentNoiseOfTarget = 0;
+            state = EnemyState.Searching;
+        }
+        currentNoiseOfTarget = Mathf.Max(0, currentNoiseOfTarget - decayRate * Time.fixedDeltaTime);
+    }
 
-		
-	}
+    void UpdatePatrolling() {
+        bool reachedDestination = MoveAlongPath();
+        if (reachedDestination)
+        {
+            currentPatrolIndex++;
 
-	void MoveAlongPath(){
-		if (currentPath == null) return;
+            if (currentPatrolIndex >= patrolPoints.Length)
+                currentPatrolIndex = 0;
 
-		if (currentWaypoint > currentPath.vectorPath.Count) return;
+            SetDestination(patrolPoints[currentPatrolIndex].position);
+        }
+
+    }
+
+    void StartPatrolling()
+    {
+        state = EnemyState.Patrolling;
+        currentPatrolIndex = GetClosestPatrolPosition();
+        SetDestination(patrolPoints[currentPatrolIndex].position);
+
+    }
+
+    int GetClosestPatrolPosition() {
+        print("ahhh");
+        float smallest = Mathf.Infinity;
+        int result = -1;
+
+        for (int i = 0; i < patrolPoints.Length; i++)
+        {
+            float dist = Vector2.Distance(transform.position, patrolPoints[i].position);
+            if (dist < smallest)
+            {
+                smallest = dist;
+                result = i;
+            }
+        }
+
+        return result;
+    }
+
+    void UpdateSearching() {
+        // TODO: Search before going back to patrolling!
+        StartPatrolling();
+    }
+
+	bool MoveAlongPath(){
+        if (currentPath == null) return false;
+
         if (currentWaypoint == currentPath.vectorPath.Count) {
-            Debug.Log("End Of Path Reached");
-			currentNoiseOfTarget = 0;
-            currentWaypoint++;
-            return;
+            currentPath = null;
+            return true;
         }
 
 		Vector3 dir = (currentPath.vectorPath[currentWaypoint]-transform.position).normalized;
@@ -59,8 +130,9 @@ public class Enemy : MonoBehaviour {
 
 		if ((transform.position-currentPath.vectorPath[currentWaypoint]).sqrMagnitude < nextWaypointDistance*nextWaypointDistance) {
             currentWaypoint++;
-            return;
         }
+
+        return false;
 	}
 
 	void OnPathComplete(Path p) {
@@ -69,23 +141,30 @@ public class Enemy : MonoBehaviour {
 	}
 
 	void SetDestination(Vector2 newDest){
-		if(currentDestination.x != newDest.x || currentDestination.y != newDest.y){
+		if (currentDestination.x != newDest.x || currentDestination.y != newDest.y){
 			seeker.StartPath(transform.position, newDest, OnPathComplete);
 			currentDestination = newDest;
 		}
 	}
 
-	public void HandleNoiseEvent(NoiseEventData data){
-		float dist = Vector2.Distance(transform.position, data.position);
+    void ChaseNoise(NoiseEventData noise) {
+        state = EnemyState.Chasing;
+        SetDestination(noise.position);
+        currentNoiseOfTarget = noise.PercievedNoise(transform.position);
+    }
 
-		float perceivedNoise = 1 - (dist / data.radius);
-		
-		if(perceivedNoise > currentNoiseOfTarget){
-			SetDestination(data.position);
-			currentNoiseOfTarget = perceivedNoise;
+	public void HandleNoiseEvent(NoiseEventData noise){
+        if (noise.PercievedNoise(transform.position) > currentNoiseOfTarget) {
+            ChaseNoise(noise);
 		}
 
 	}
+
+    public void OnCollisionEnter2D(Collision2D collision) {
+        if (collision.gameObject.tag == "Player") {
+            UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+        }
+    }
 
 
 }
