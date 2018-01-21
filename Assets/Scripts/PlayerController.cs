@@ -6,8 +6,12 @@ using Rewired;
 public class PlayerController : MonoBehaviour {
 
 	public int playerIndex = 0;
-	public float speed = 5;
+	public float walkSpeed = 8;
+	public float runSpeed = 15;
+
 	public float volumeMultiplier = 1;
+
+	// DEBUG
 	public Transform noiseCircle;
 
 	Player player;
@@ -21,15 +25,20 @@ public class PlayerController : MonoBehaviour {
 	void FixedUpdate () {
 		float horizontal = player.GetAxis("Horizontal");
 		float vertical = player.GetAxis("Vertical");
-		Vector2 dir = new Vector2(horizontal, vertical);
+		bool running = player.GetButton("Run");
 
-		if (dir.magnitude > 0) {
-			NoiseManager.MakeNoise(transform.position, dir.magnitude * volumeMultiplier);	
+		Vector2 dir = new Vector2(horizontal, vertical);
+		float speed = running ? runSpeed : walkSpeed;
+		float noiseLevel = rb.velocity.magnitude * volumeMultiplier;
+	
+		rb.AddForce(dir * speed);
+
+		if (noiseLevel > 0) {
+			NoiseManager.MakeNoise(transform.position, noiseLevel);	
 		}
 
-		noiseCircle.localScale = Vector2.one * (dir.magnitude * volumeMultiplier * 2);
-
-		rb.AddForce(dir * speed);
+		// DEBUG
+		noiseCircle.localScale = Vector2.one * noiseLevel * 2;		
 	}
 
 	void Update(){

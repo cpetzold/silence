@@ -253,7 +253,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 273d123feb9e3f345873dbffce38bd5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 25
+  speed: 20
   nextWaypointDistance: 0.5
   decayRate: 0.75
   currentNoiseOfTarget: 0
@@ -3152,6 +3152,15 @@ MonoBehaviour:
       _behaviorId: 0
       _userAssignable: 1
       _categoryId: 0
+    - _id: 3
+      _name: Run
+      _type: 1
+      _descriptiveName: Run
+      _positiveDescriptiveName: 
+      _negativeDescriptiveName: 
+      _behaviorId: 0
+      _userAssignable: 1
+      _categoryId: 0
     actionCategories:
     - _name: Default
       _descriptiveName: Default
@@ -3161,7 +3170,7 @@ MonoBehaviour:
     actionCategoryMap:
       list:
       - categoryId: 0
-        actionIds: 000000000100000002000000
+        actionIds: 00000000010000000200000003000000
     inputBehaviors:
     - _id: 0
       _name: Default
@@ -3251,12 +3260,23 @@ MonoBehaviour:
         _modifierKey1: 0
         _modifierKey2: 0
         _modifierKey3: 0
+      - _actionCategoryId: 0
+        _actionId: 3
+        _elementType: 1
+        _elementIdentifierId: 13
+        _axisRange: 0
+        _invert: 0
+        _axisContribution: 0
+        _keyboardKeyCode: 0
+        _modifierKey1: 0
+        _modifierKey2: 0
+        _modifierKey3: 0
     keyboardMaps: []
     mouseMaps: []
     customControllerMaps: []
     customControllers: []
     playerIdCounter: 3
-    actionIdCounter: 3
+    actionIdCounter: 4
     actionCategoryIdCounter: 1
     inputBehaviorIdCounter: 1
     mapCategoryIdCounter: 1
@@ -3327,7 +3347,7 @@ MonoBehaviour:
   manualDebugFloorRoof: 0
   showSearchTree: 0
   unwalkableNodeDebugSize: 0.3
-  logPathResults: 1
+  logPathResults: 0
   maxNearestNodeDistance: 100
   scanOnStartup: 1
   fullGetNearestSearch: 0
@@ -3798,15 +3818,6 @@ Prefab:
     - target: {fileID: 4549350455131450, guid: 22cc71e844f6c864f858abc8e2bec18c, type: 2}
       propertyPath: m_RootOrder
       value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 114434498223811570, guid: 22cc71e844f6c864f858abc8e2bec18c,
-        type: 2}
-      propertyPath: playerIndex
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1104182412295150, guid: 22cc71e844f6c864f858abc8e2bec18c, type: 2}
-      propertyPath: m_TagString
-      value: Player
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 22cc71e844f6c864f858abc8e2bec18c, type: 2}
