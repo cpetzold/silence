@@ -43,8 +43,8 @@ public class PlayerController : MonoBehaviour {
 
 	void Update(){
 		if (player.GetButton("YELL")) {
-			NoiseManager.MakeNoise(transform.position, 30);
-			noiseCircle.localScale = Vector2.one * 60;
+			//NoiseManager.MakeNoise(transform.position, 30);
+			//noiseCircle.localScale = Vector2.one * 60;
 		}
 	}
 }
