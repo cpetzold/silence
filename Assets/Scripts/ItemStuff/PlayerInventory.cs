@@ -29,12 +29,7 @@ public class PlayerInventory : MonoBehaviour {
         {
             if (currentItem != null)
             {
-                currentItem.Use(this);
-                
-                numUses -= 1;
-
-                if(numUses <= 0)
-                    currentItem = null;
+                UseItem();
                 
             }
             else
@@ -82,5 +77,15 @@ public class PlayerInventory : MonoBehaviour {
         {
             return false;
         }
+    }
+
+    public void UseItem()
+    {
+        currentItem.Use(this);
+
+        numUses -= 1;
+
+        if (numUses <= 0)
+            currentItem = null;
     }
 }
