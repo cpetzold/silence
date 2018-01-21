@@ -28,20 +28,12 @@ public class Enemy : MonoBehaviour {
     public EnemyState state;
 
 	// Use this for initialization
-	void Start() { 
+	void Start() {
 		seeker = GetComponent<Seeker>();
 		rb = GetComponent<Rigidbody2D>();
+        patrolPoints = patrolPointsParent.GetChildren();
 
 		NoiseManager.instance.OnNoiseMade.AddListener(HandleNoiseEvent);
-        
-
-        patrolPoints = new Transform[patrolPointsParent.childCount];
-        for (int i = 0; i < patrolPoints.Length; i++)
-        {
-            patrolPoints[i] = patrolPointsParent.GetChild(i);
-        }
-        //patrolPoints = patrolPointsParent.GetComponentsInChildren<Transform>();
-
         StartPatrolling();
 	}
 	
@@ -86,8 +78,7 @@ public class Enemy : MonoBehaviour {
 
     }
 
-    void StartPatrolling()
-    {
+    void StartPatrolling() {
         state = EnemyState.Patrolling;
         currentPatrolIndex = GetClosestPatrolPosition();
         SetDestination(patrolPoints[currentPatrolIndex].position);
@@ -95,7 +86,6 @@ public class Enemy : MonoBehaviour {
     }
 
     int GetClosestPatrolPosition() {
-        print("ahhh");
         float smallest = Mathf.Infinity;
         int result = -1;
 
