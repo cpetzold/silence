@@ -240,7 +240,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60a3ff5178417c145837b20b32174011, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventoryItem: {fileID: 11400000, guid: 5a084a73eb2b3ad418929a7fb0771a60, type: 2}
+  inventoryItem: {fileID: 11400000, guid: a78ca21848868b7419c6fb8ae09de74e, type: 2}
 --- !u!1001 &120913325
 Prefab:
   m_ObjectHideFlags: 0
