@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "InventoryItem")]
+[CreateAssetMenu(fileName = "BaseItem", menuName="Inventory Items/BaseItem")]
 public class InventoryItem : ScriptableObject {
 
     public Texture icon;
     public int numUses;
 
-    public virtual void Use(Transform userTransform)
+    public virtual void Use(PlayerInventory inventory)
     {
-        Debug.Log("test use");
+
     }
 }

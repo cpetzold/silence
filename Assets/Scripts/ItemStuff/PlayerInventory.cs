@@ -7,6 +7,7 @@ using Rewired;
 public class PlayerInventory : MonoBehaviour {
 
     public InventoryItem currentItem;
+    public int numUses;
 
     Player player;
     PlayerController controller;
@@ -28,7 +29,13 @@ public class PlayerInventory : MonoBehaviour {
         {
             if (currentItem != null)
             {
-                currentItem.Use(transform);
+                currentItem.Use(this);
+                
+                numUses -= 1;
+
+                if(numUses <= 0)
+                    currentItem = null;
+                
             }
             else
             {
@@ -68,6 +75,7 @@ public class PlayerInventory : MonoBehaviour {
         if (currentItem == null)
         {
             currentItem = item;
+            numUses = item.numUses;
             return true;
         }
         else
