@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: Airhorn
   m_EditorClassIdentifier: 
   icon: {fileID: 0}
-  numUses: 3
+  numUses: 1
   thrownItemPrefab: {fileID: 1397739376084126, guid: 57fac6a03fb5f214d84c715f38091e9b,
     type: 2}
   throwSpeed: 0

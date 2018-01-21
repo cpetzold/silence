@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: RockItem
   m_EditorClassIdentifier: 
   icon: {fileID: 0}
-  numUses: 5
+  numUses: 1
   thrownItemPrefab: {fileID: 1397739376084126, guid: 14a5a7715e1235440820a0a96fe9e671,
     type: 2}
   throwSpeed: 10
