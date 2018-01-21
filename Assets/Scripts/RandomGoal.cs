@@ -36,7 +36,7 @@ public class RandomGoal : MonoBehaviour {
             tile = level.GetTile(new Vector3Int(randx, randy, 0));
         } while (tile != null);
 
-        transform.position = level.CellToWorld(new Vector3Int(randx, randy, 0));
+        transform.position = level.CellToWorld(new Vector3Int(randx, randy, 0)) + (level.cellSize / 2);
     }
 
     public void OnTriggerEnter2D(Collider2D collision) {
