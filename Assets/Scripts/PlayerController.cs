@@ -25,17 +25,15 @@ public class PlayerController : MonoBehaviour {
 
 		if (dir.magnitude > 0) {
 			NoiseManager.MakeNoise(transform.position, dir.magnitude * volumeMultiplier);	
-			noiseCircle.localScale = Vector2.one * (dir.magnitude * volumeMultiplier * 2);
 		}
-		else{
-			noiseCircle.localScale = Vector2.one * (.01f);
-		}
+
+		noiseCircle.localScale = Vector2.one * (dir.magnitude * volumeMultiplier * 2);
 
 		rb.AddForce(dir * speed);
 	}
 
 	void Update(){
-		if(player.GetButton("YELL")){
+		if (player.GetButton("YELL")) {
 			NoiseManager.MakeNoise(transform.position, 30);
 			noiseCircle.localScale = Vector2.one * 60;
 		}
