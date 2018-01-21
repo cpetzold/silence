@@ -17,7 +17,7 @@ public class RandomGoal : MonoBehaviour {
 
     [Button]
     void MoveGoalToRandomPosition() {
-        TileBase tile;
+        Tile.ColliderType colliderType;
         int randx;
         int randy;
 
@@ -25,8 +25,8 @@ public class RandomGoal : MonoBehaviour {
             randx = Random.Range(level.cellBounds.xMin+1, level.cellBounds.xMax-1);
             randy = Random.Range(level.cellBounds.yMin+1, level.cellBounds.yMax-1);
 
-            tile = level.GetTile(new Vector3Int(randx, randy, 0));
-        } while (tile != null);
+            colliderType = level.GetColliderType(new Vector3Int(randx, randy, 0));
+        } while (colliderType != Tile.ColliderType.None);
 
         transform.position = level.CellToWorld(new Vector3Int(randx, randy, 0)) + (level.cellSize / 2);
     }
