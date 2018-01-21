@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Pathfinding;
 
@@ -9,7 +10,9 @@ public enum EnemyState {
 
 public class Enemy : MonoBehaviour {
 
-	public float speed = 1;
+	public float chaseSpeed = 20;
+    public float patrolSpeed = 15;
+    public float searchSpeed = 10;
 	public float nextWaypointDistance = 3;
 	public float decayRate = 5;
 
@@ -22,8 +25,14 @@ public class Enemy : MonoBehaviour {
 	Seeker seeker;
 
     public Transform patrolPointsParent;
-    public Transform[] patrolPoints;
+    public Vector2[] patrolPoints;
     public int currentPatrolIndex = 0;
+
+    public LayerMask searchLayerMask;
+    public Vector2[] searchPoints;
+    public int currentSearchIndex = 0;
+    public float maxSearchDistance = 2.0f;
+    public float searchWallPadding = 0.5f;
 
     public EnemyState state;
 
@@ -31,10 +40,12 @@ public class Enemy : MonoBehaviour {
 	void Start() {
 		seeker = GetComponent<Seeker>();
 		rb = GetComponent<Rigidbody2D>();
-        patrolPoints = patrolPointsParent.GetChildren();
+        patrolPoints = patrolPointsParent.GetChildren().Select(t => (Vector2)t.position).ToArray();
 
 		NoiseManager.instance.OnNoiseMade.AddListener(HandleNoiseEvent);
-        StartPatrolling();
+        
+        StartSearching();
+        //StartPatrolling();
 	}
 	
 	void Destroy() {
@@ -56,56 +67,70 @@ public class Enemy : MonoBehaviour {
 	}
 
     void UpdateChasing() {
-        bool reachedDestination = MoveAlongPath();
+        bool reachedDestination = MoveAlongPath(chaseSpeed);
         if (reachedDestination) {
             currentNoiseOfTarget = 0;
-            state = EnemyState.Searching;
+            StartSearching();
         }
         currentNoiseOfTarget = Mathf.Max(0, currentNoiseOfTarget - decayRate * Time.fixedDeltaTime);
     }
 
     void UpdatePatrolling() {
-        bool reachedDestination = MoveAlongPath();
+        bool reachedDestination = MoveAlongPath(patrolSpeed);
         if (reachedDestination) {
             currentPatrolIndex++;
 
             if (currentPatrolIndex >= patrolPoints.Length)
                 currentPatrolIndex = 0;
 
-            SetDestination(patrolPoints[currentPatrolIndex].position);
+            SetDestination(patrolPoints[currentPatrolIndex]);
         }
     }
 
     void StartPatrolling() {
         state = EnemyState.Patrolling;
-        currentPatrolIndex = GetClosestPatrolPosition();
-        SetDestination(patrolPoints[currentPatrolIndex].position);
-
+        currentPatrolIndex = patrolPoints.IndexOfClosest(transform.position);
+        SetDestination(patrolPoints[currentPatrolIndex]);
     }
 
-    int GetClosestPatrolPosition() {
-        float smallest = Mathf.Infinity;
-        int result = -1;
-
-        for (int i = 0; i < patrolPoints.Length; i++)
-        {
-            float dist = Vector2.Distance(transform.position, patrolPoints[i].position);
-            if (dist < smallest)
-            {
-                smallest = dist;
-                result = i;
+    void UpdateSearching() {
+        bool reachedDestination = MoveAlongPath(searchSpeed);
+        if (reachedDestination) {
+            if (currentSearchIndex == searchPoints.Length - 1) {
+                StartPatrolling();
+            } else {
+                SetDestination(searchPoints[++currentSearchIndex]);
             }
+        }
+        
+        foreach (Vector2 p in searchPoints) {
+            DebugExtension.DebugPoint(p, Color.red, 0.2f);
+        }
+    }
+
+    void StartSearching() {
+        state = EnemyState.Searching;
+
+        int numPoints = Random.Range(2, 5);
+        searchPoints = GetSearchPoints(numPoints);
+        currentSearchIndex = 0;
+        SetDestination(searchPoints[currentSearchIndex]);
+    }
+
+    Vector2[] GetSearchPoints(int numPoints) {
+        Vector2[] result = new Vector2[numPoints];
+
+        for (int i = 0; i < numPoints; i++) {
+            float angle = Random.Range(0.0f, 360.0f);
+            Vector2 dir = Quaternion.AngleAxis(angle, Vector3.forward) * Vector3.right;
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, dir, maxSearchDistance, searchLayerMask);
+            result[i] = (Vector2)transform.position + (dir * (hit.collider != null ? hit.distance - searchWallPadding : maxSearchDistance));
         }
 
         return result;
     }
 
-    void UpdateSearching() {
-        // TODO: Search before going back to patrolling!
-        StartPatrolling();
-    }
-
-	bool MoveAlongPath(){
+	bool MoveAlongPath(float speed) {
         if (currentPath == null) return false;
 
         if (currentWaypoint == currentPath.vectorPath.Count) {

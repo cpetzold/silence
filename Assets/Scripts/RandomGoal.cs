@@ -11,16 +11,8 @@ public class RandomGoal : MonoBehaviour {
     public int x;
     public int y;
 
-	// Use this for initialization
 	void Start () {
         MoveGoalToRandomPosition();
-
-        TilemapCollider2D collider = level.GetComponent<TilemapCollider2D>();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-        
 	}
 
     [Button]

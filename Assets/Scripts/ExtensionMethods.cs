@@ -12,4 +12,19 @@ public static class ExtensionMethods {
 		return children;
 	}
 
+	public static int IndexOfClosest(this Vector2[] points, Vector2 to) {
+		float smallest = Mathf.Infinity;
+        int result = -1;
+
+		for (int i = 0; i < points.Length; i++) {
+            float dist = Vector2.Distance(to, points[i]);
+            if (dist < smallest) {
+                smallest = dist;
+                result = i;
+            }
+        }
+
+        return result;
+	}
+
 }
