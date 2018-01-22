@@ -10,6 +10,7 @@ public class InteractableItem : InteractableObject {
     {
         if (playerInventory.PickupItem(inventoryItem))
         {
+            GameManager.instance.items.Remove(this);
             Destroy(this.gameObject);
         }
     }

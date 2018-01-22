@@ -157,7 +157,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 273d123feb9e3f345873dbffce38bd5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chaseSpeed: 20
+  chaseSpeed: 25
   patrolSpeed: 15
   searchSpeed: 10
   nextWaypointDistance: 0.5

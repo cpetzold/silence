@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "BaseItem", menuName="Inventory Items/BaseItem")]
 public class InventoryItem : ScriptableObject {
 
-    public Texture icon;
+    public Sprite icon;
     public int numUses;
 
     public virtual void Use(PlayerInventory inventory)

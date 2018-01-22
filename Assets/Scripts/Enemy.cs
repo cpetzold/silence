@@ -85,11 +85,8 @@ public class Enemy : MonoBehaviour {
 
     void UpdatePatrolling() {
         bool reachedDestination = MoveAlongPath(patrolSpeed);
-        if (reachedDestination) {
-            currentPatrolIndex++;
-
-            if (currentPatrolIndex >= patrolPoints.Length)
-                currentPatrolIndex = 0;
+        if (reachedDestination || currentPath == null) {
+            currentPatrolIndex = Random.Range(0, patrolPoints.Length);
 
             SetDestination(patrolPoints[currentPatrolIndex]);
         }

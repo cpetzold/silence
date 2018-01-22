@@ -14,11 +14,16 @@ public class PlayerController : MonoBehaviour {
 	// DEBUG
 	public Transform noiseCircle;
 
-	Player player;
+	public Player player;
 	Rigidbody2D rb;
 
 	void Awake() {
 		rb = GetComponent<Rigidbody2D>();
+		SetPlayerIndex(playerIndex);
+	}
+
+	public void SetPlayerIndex(int index) {
+		playerIndex = index;
 		player = ReInput.players.GetPlayer(playerIndex);
 	}
 	

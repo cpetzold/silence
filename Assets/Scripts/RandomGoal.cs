@@ -32,8 +32,10 @@ public class RandomGoal : MonoBehaviour {
     }
 
     public void OnTriggerEnter2D(Collider2D collision) {
-        GameManager.instance.CollectGoal();
-        MoveGoalToRandomPosition();
+        if(collision.gameObject.tag == "Player"){
+            GameManager.instance.CollectGoal();
+            MoveGoalToRandomPosition();
+        }
     }
 
 }

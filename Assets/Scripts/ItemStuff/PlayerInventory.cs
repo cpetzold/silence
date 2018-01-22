@@ -8,8 +8,8 @@ public class PlayerInventory : MonoBehaviour {
 
     public InventoryItem currentItem;
     public int numUses;
+    public SpriteRenderer itemSpriteRenderer;
 
-    Player player;
     PlayerController controller;
 
     List<InteractableObject> nearbyItems;
@@ -17,7 +17,6 @@ public class PlayerInventory : MonoBehaviour {
     void Awake()
     {
         controller = GetComponent<PlayerController>();
-        player = ReInput.players.GetPlayer(controller.playerIndex);
 
         nearbyItems = new List<InteractableObject>();
     }
@@ -25,7 +24,7 @@ public class PlayerInventory : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        if (player.GetButtonDown("YELL"))
+        if (controller.player.GetButtonDown("YELL"))
         {
             if (currentItem != null)
             {
@@ -71,6 +70,8 @@ public class PlayerInventory : MonoBehaviour {
         {
             currentItem = item;
             numUses = item.numUses;
+            itemSpriteRenderer.sprite = currentItem.icon;
+            itemSpriteRenderer.enabled = true;
             return true;
         }
         else
@@ -85,7 +86,9 @@ public class PlayerInventory : MonoBehaviour {
 
         numUses -= 1;
 
-        if (numUses <= 0)
+        if (numUses <= 0) {
             currentItem = null;
+            itemSpriteRenderer.enabled = false;
+        }
     }
 }

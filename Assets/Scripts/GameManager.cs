@@ -1,14 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 using UnityEngine.Tilemaps;
 
 using Rewired;
 
 public class GameManager : MonoBehaviour {
-    public Color p1Color;
-    public Color p2Color;
+    public Color[] playerColors;
 
     public Enemy enemyPrefab;
     public PlayerController playerPrefab;
@@ -24,6 +24,16 @@ public class GameManager : MonoBehaviour {
 
     Player p1rewired;
     Player p2rewired;
+    Player p3rewired;
+    Player p4rewired;
+
+    public InteractableItem[] itemPrefabs;
+    public List<InteractableItem> items;
+
+    public float itemTimeout = 10;
+    public int maxItems = 5;
+
+    public Text score;
 
     public static GameManager instance;
 	// Use this for initialization
@@ -32,21 +42,43 @@ public class GameManager : MonoBehaviour {
         playerControllers = new PlayerController[4];
         p1rewired = ReInput.players.GetPlayer(0);
         p2rewired = ReInput.players.GetPlayer(1);
+        p3rewired = ReInput.players.GetPlayer(2);
+        p4rewired = ReInput.players.GetPlayer(3);
 
         enemies = new List<Enemy>();
+        items = new List<InteractableItem>();
         SpawnEnemy();
+        SpawnItem();
+        SpawnItem();
+        SpawnItem();
+
+        StartCoroutine(SpawnItemCo());
 	}
 	
 	// Update is called once per frame
 	void Update () {
         if (p1rewired.GetButtonDown("Start") && playerControllers[0] == null)
         {
-            playerControllers[0] = SpawnPlayer(0, p1Color);
+            playerControllers[0] = SpawnPlayer(0, playerColors[0]);
         }
 
         if (p2rewired.GetButtonDown("Start") && playerControllers[1] == null)
         {
-            playerControllers[1] = SpawnPlayer(1, p2Color);
+            playerControllers[1] = SpawnPlayer(1, playerColors[1]);
+        }
+
+        if (p3rewired.GetButtonDown("Start") && playerControllers[2] == null)
+        {
+            playerControllers[2] = SpawnPlayer(2, playerColors[2]);
+        }
+
+         if (p4rewired.GetButtonDown("Start") && playerControllers[3] == null)
+        {
+            playerControllers[3] = SpawnPlayer(3, playerColors[3]);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            Application.Quit();
         }
 
     }
@@ -62,14 +94,21 @@ public class GameManager : MonoBehaviour {
     {
         PlayerController newPlayer = Instantiate(playerPrefab);
         newPlayer.transform.position = GetRandomUnoccupedPosition();
-        newPlayer.playerIndex = playerIndex;
+        newPlayer.SetPlayerIndex(playerIndex);
         newPlayer.GetComponent<SpriteRenderer>().color = col;
         return newPlayer;
+    }
+
+    void SpawnItem() {
+        InteractableItem item = Instantiate(itemPrefabs[Random.Range(0, itemPrefabs.Length)]);
+        item.transform.position = GetRandomUnoccupedPosition();
+        items.Add(item);
     }
 
     public void CollectGoal()
     {
         goalsCollected += 1;
+        score.text = goalsCollected.ToString();
 
         int numDesiredEnemies = (int)Mathf.Floor(enemiesForGoals.Evaluate(goalsCollected));
 
@@ -95,6 +134,15 @@ public class GameManager : MonoBehaviour {
         } while (colliderType != Tile.ColliderType.None);
 
         return level.CellToWorld(new Vector3Int(randx, randy, 0)) + (level.cellSize / 2);
+    }
+
+    IEnumerator SpawnItemCo() {
+        while (true) {
+            yield return new WaitForSeconds(itemTimeout);
+            if (items.Count < maxItems) {
+                SpawnItem();
+            }
+        }
     }
 
 }
